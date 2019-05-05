@@ -29,6 +29,7 @@ import com.computerdesign.whutHouseMgmt.bean.staffmanagement.StaffIcon;
 import com.computerdesign.whutHouseMgmt.bean.staffmanagement.StaffModel;
 import com.computerdesign.whutHouseMgmt.bean.staffmanagement.StaffValue;
 import com.computerdesign.whutHouseMgmt.bean.staffmanagement.StaffVw;
+import com.computerdesign.whutHouseMgmt.bean.staffmanagement.UpdateStaffRoleModel;
 import com.computerdesign.whutHouseMgmt.bean.staffparam.StaffParameter;
 import com.computerdesign.whutHouseMgmt.bean.staffparam.StaffParameterModel;
 import com.computerdesign.whutHouseMgmt.controller.BaseController;
@@ -62,6 +63,30 @@ public class StaffController extends BaseController {
 	
 	@Autowired
 	private StaffForMonSubService staffForMonSubService;
+	
+	/**
+	 * 该员工设置角色
+	 * @param staffId
+	 * @param roleId
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "updateStaffRole", method = RequestMethod.POST)
+	public Msg updateStaffRole(@RequestBody UpdateStaffRoleModel updateStaffRoleModel){
+		if(updateStaffRoleModel != null){
+			Staff staff = staffService.get(updateStaffRoleModel.getStaffId());
+			if(staff != null){
+				staff.setRoleId(updateStaffRoleModel.getRoleId());
+				staffService.update(staff);
+				return Msg.success("设置成功");
+			}else{
+				return Msg.error("员工不存在");
+			}
+		}else{
+			return Msg.error("传递参数错误");
+		}
+		
+	}
 	
 	/**
 	 * 解除绑定
